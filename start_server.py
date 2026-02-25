@@ -3,11 +3,76 @@ import socketserver
 import webbrowser
 import os
 import json
+import subprocess
+from datetime import datetime
 
 # Change directory to the script's directory
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 PORT = 8080
+
+
+def auto_sync_pull():
+    """サーバー起動時にGitHubから最新データを取得する"""
+    try:
+        print("=========================================")
+        print(" GitHub から最新データを取得しています...")
+        print("=========================================")
+        result = subprocess.run(
+            ['git', 'pull', 'origin', 'main', '--rebase'],
+            capture_output=True, text=True, timeout=30
+        )
+        if result.returncode == 0:
+            print(f"  ✓ 取得完了: {result.stdout.strip()}")
+        else:
+            print(f"  ⚠ 取得に失敗しました（サーバーは通常通り起動します）")
+            print(f"    {result.stderr.strip()}")
+    except FileNotFoundError:
+        print("  ⚠ git が見つかりません。手動で同期してください。")
+    except subprocess.TimeoutExpired:
+        print("  ⚠ タイムアウトしました。ネットワーク接続を確認してください。")
+    except Exception as e:
+        print(f"  ⚠ 同期エラー: {e}")
+    print()
+
+
+def auto_sync_push():
+    """サーバー終了時に変更をGitHubへバックアップする"""
+    try:
+        print()
+        print("=========================================")
+        print(" 変更を GitHub へバックアップしています...")
+        print("=========================================")
+
+        # ステージング
+        subprocess.run(['git', 'add', '.'], capture_output=True, text=True, timeout=10)
+
+        # コミット（変更がない場合は何もしない）
+        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        commit_result = subprocess.run(
+            ['git', 'commit', '-m', f'Auto-sync on server shutdown: {timestamp}'],
+            capture_output=True, text=True, timeout=10
+        )
+        if commit_result.returncode != 0 and 'nothing to commit' in commit_result.stdout:
+            print("  ✓ 変更なし（バックアップ不要）")
+            return
+
+        # プッシュ
+        push_result = subprocess.run(
+            ['git', 'push', 'origin', 'main'],
+            capture_output=True, text=True, timeout=30
+        )
+        if push_result.returncode == 0:
+            print("  ✓ バックアップ完了!")
+        else:
+            print(f"  ⚠ プッシュに失敗しました")
+            print(f"    {push_result.stderr.strip()}")
+    except FileNotFoundError:
+        print("  ⚠ git が見つかりません。手動で同期してください。")
+    except subprocess.TimeoutExpired:
+        print("  ⚠ タイムアウトしました。ネットワーク接続を確認してください。")
+    except Exception as e:
+        print(f"  ⚠ バックアップエラー: {e}")
 
 # AI Bridge を遅延インポート（起動時のエラーを防ぐ）
 ai_bridge = None
@@ -168,6 +233,9 @@ class KizukiHandler(http.server.SimpleHTTPRequestHandler):
 
 
 try:
+    # サーバー起動前にGitHubから最新データを取得
+    auto_sync_pull()
+
     with socketserver.TCPServer(("", PORT), KizukiHandler) as httpd:
         print(f"Serving at http://localhost:{PORT}")
         webbrowser.open(f"http://localhost:{PORT}")
@@ -175,6 +243,8 @@ try:
             httpd.serve_forever()
         except KeyboardInterrupt:
             print("\nServer stopped.")
+            # サーバー終了時に変更をGitHubへバックアップ
+            auto_sync_push()
 except OSError as e:
     if e.errno == 48 or (hasattr(e, 'winerror') and e.winerror == 10048):
         print(f"Port {PORT} is already in use. Try closing other python servers or applications.")
