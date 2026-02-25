@@ -1,0 +1,23 @@
+﻿feedbacks: CREATE TABLE feedbacks (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        journal_id INTEGER,
+        comment TEXT,
+        intent TEXT,
+        FOREIGN KEY (journal_id) REFERENCES journals (id)
+    )
+journals: CREATE TABLE journals (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        student_id INTEGER,
+        date TEXT,
+        week_number INTEGER,
+        content_raw TEXT,
+        FOREIGN KEY (student_id) REFERENCES students (id)
+    )
+insights: CREATE TABLE insights (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        journal_id INTEGER,
+        type TEXT,
+        snippet TEXT,
+        reason TEXT,
+        FOREIGN KEY (journal_id) REFERENCES journals (id)
+    )

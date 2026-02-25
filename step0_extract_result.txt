@@ -1,0 +1,43 @@
+﻿python : Traceback (mo
+st recent call last):
+発生場所 行:1 文字:1
++ python step0_extract
+_data.py 2>&1 | Out-Fi
+le -FilePath step0_ext
+ract_ ...
++ ~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
+    + CategoryInfo    
+          : NotSpeci  
+  fied: (Traceback    
+ (most recent call    
+ last)::String) [    ]
+, RemoteExceptio    n
+    + FullyQualifiedE 
+   rrorId : NativeCo  
+  mmandError
+ 
+  File "C:\Users\NOAH\
+OneDrive - 株式会社 ｗｏｒｍｗｏ
+ｏｄ\実習ツール類\Kizuki log\s
+tep0_extract_data.py",
+ line 96, in <module>
+    extract_data()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\NOAH\
+OneDrive - 株式会社 ｗｏｒｍｗｏ
+ｏｄ\実習ツール類\Kizuki log\s
+tep0_extract_data.py",
+ line 82, in extract_d
+ata
+    print(f"\u2713 {le
+n(rows)}件を抽出しました: {OUT
+PUT_FILE}")
+    ~~~~~^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^
+UnicodeEncodeError: 'c
+p932' codec can't enco
+de character '\u2713' 
+in position 0: illegal
+ multibyte sequence

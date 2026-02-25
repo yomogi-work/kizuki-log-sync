@@ -1,0 +1,66 @@
+﻿============================================================
+[DB構造報告]
+============================================================
+
+- テーブル: students, journals, feedbacks, insights, growth_triggers
+
+- insights カラム:
+    id (INTEGER), PK=1, NOT NULL=0
+    journal_id (INTEGER), PK=0, NOT NULL=0
+    type (TEXT), PK=0, NOT NULL=0
+    snippet (TEXT), PK=0, NOT NULL=0
+    reason (TEXT), PK=0, NOT NULL=0
+
+- journals カラム:
+    id (INTEGER), PK=1, NOT NULL=0
+    student_id (INTEGER), PK=0, NOT NULL=0
+    date (TEXT), PK=0, NOT NULL=0
+    week_number (INTEGER), PK=0, NOT NULL=0
+    content_raw (TEXT), PK=0, NOT NULL=0
+
+- students カラム:
+    id (INTEGER), PK=1, NOT NULL=0
+    name (TEXT), PK=0, NOT NULL=1
+    start_date (TEXT), PK=0, NOT NULL=0
+
+- insights件数: 8件
+- 学生数: 4名
+- Week数: 3週分
+
+- Type分布:
+    線: 2件
+    滲み出し: 2件
+    伏線回収: 2件
+    生活背景: 1件
+    地域資源: 1件
+
+- insights → journals 参照方法:
+    insights.journal_id → journals.id (FOREIGN KEY)
+    例: insight#1 → journal#16 (student=4, week=1)
+         content_raw: 【実習内容】
+CKDの患者さんのアムロジピン、ピバスタチン、トラゼンタ、シロドシン、スー
+グラ、デュステリド、フェブキソスタットの計数調剤をした。
+パーキンソン...
+    例: insight#2 → journal#26 (student=4, week=11)
+         content_raw: 【実習内容】
+前回に引き続き疑義照会の内容は、出荷停止になっている薬が処方されていたた
+め変更の疑義だった。前回と違った点は代替案を出したことだった。
+代替品を...
+    例: insight#3 → journal#1 (student=1, week=1)
+         content_raw: 【実習内容】
+本日は、受付業務の担当だったので、処方箋を患者さんから受け取る、マイナン
+バーカードとお薬手帳を持っているかの確認をした。また、OTCを探している...
+
+- 学生 × Week × Insight件数:
+    中﨑 優奈 / Week 1: 1件
+    中﨑 優奈 / Week 5: 0件
+    中﨑 優奈 / Week 11: 1件
+    渡辺 新夏 / Week 1: 1件
+    渡辺 新夏 / Week 5: 0件
+    渡辺 新夏 / Week 11: 1件
+    湯口 万里奈 / Week 1: 0件
+    湯口 万里奈 / Week 5: 1件
+    湯口 万里奈 / Week 11: 1件
+    田中 靖子 / Week 1: 0件
+    田中 靖子 / Week 5: 1件
+    田中 靖子 / Week 11: 1件

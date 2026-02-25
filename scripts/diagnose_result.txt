@@ -1,0 +1,49 @@
+﻿============================================================
+1. dashboard_data.json の八木データ
+============================================================
+  Student: 中﨑 優奈 | ID: 1 | Journals: 16
+  Student: 渡辺 新夏 | ID: 4 | Journals: 14
+  Student: 湯口 万里奈 | ID: 7 | Journals: 14
+  Student: 田中 靖子 | ID: 10 | Journals: 13
+  Student: 八木 果鈴 | ID: 1770859069060 | Journals: 0
+
+  八木さん詳細:
+    ID: 1770859069060
+    Name: 八木 果鈴
+    Journals count: 0
+    Growth triggers: []
+    Insights: []
+    All keys: ['id', 'name', 'settings', 'journals', 'growth_triggers', 'insights']
+    Settings: {'startDate': '2026-02-16', 'endDate': '2026-05-03', 'goal': '', 'interests': '在宅医療、多職種連携、薬理学'}
+
+============================================================
+2. バックアップファイルの八木データ
+============================================================
+  dashboard_data.json.bak: ID=1770557409811, Journals=0
+  dashboard_data.json.repair_bak: ID=1770560078054, Journals=1
+    Date: 2025-05-26 | Practical: 18 chars | Unachieved: 16 chars
+
+============================================================
+3. kizuki_log.db の八木データ
+============================================================
+  テーブル一覧: ['sqlite_sequence', 'students', 'journals', 'feedbacks', 'insights', 'growth_triggers']
+
+  sqlite_sequence: 5 rows, columns: [('name', ''), ('seq', '')]
+
+  students: 4 rows, columns: [('id', 'INTEGER'), ('name', 'TEXT'), ('start_date', 'TEXT')]
+
+  journals: 211 rows, columns: [('id', 'INTEGER'), ('student_id', 'INTEGER'), ('date', 'TEXT'), ('week_number', 'INTEGER'), ('content_raw', 'TEXT')]
+
+  feedbacks: 144 rows, columns: [('id', 'INTEGER'), ('journal_id', 'INTEGER'), ('comment', 'TEXT'), ('intent', 'TEXT')]
+
+  insights: 0 rows, columns: [('id', 'INTEGER'), ('journal_id', 'INTEGER'), ('type', 'TEXT'), ('snippet', 'TEXT'), ('reason', 'TEXT')]
+
+  growth_triggers: 12 rows, columns: [('id', 'INTEGER'), ('student_id', 'INTEGER'), ('date', 'TEXT'), ('description', 'TEXT')]
+
+============================================================
+4. データ同期に関する考察
+============================================================
+  - 八木さんのID (1770859069060) はDate.now()由来の可能性大
+  - 他の学生のID (1,4,7,10) はDBの連番ID
+  - → 八木さんはDBから読み込まれず、UIから新規追加された可能性
+  - ジャーナルが0 → データがどこかで失われた

@@ -1,0 +1,48 @@
+﻿============================================================
+Kizuki-Log: 全PDF日誌データ投入パイプライン
+============================================================
+python : Traceback (mo
+st recent call last):
+発生場所 行:1 文字:1
++ python scripts\inges
+t_all_pdfs.py 2>&1 | O
+ut-File -FilePath inge
+st_re ...
++ ~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~
+    + CategoryInfo    
+          : NotSpeci  
+  fied: (Traceback    
+ (most recent call    
+ last)::String) [    ]
+, RemoteExceptio    n
+    + FullyQualifiedE 
+   rrorId : NativeCo  
+  mmandError
+ 
+  File "C:\Users\NOAH\
+OneDrive - 株式会社 ｗｏｒｍｗｏ
+ｏｄ\実習ツール類\Kizuki log\s
+cripts\ingest_all_pdfs
+.py", line 280, in <mo
+dule>
+    main()
+    ~~~~^^
+  File "C:\Users\NOAH\
+OneDrive - 株式会社 ｗｏｒｍｗｏ
+ｏｄ\実習ツール類\Kizuki log\s
+cripts\ingest_all_pdfs
+.py", line 259, in mai
+n
+    print("\n\U0001f4d
+6 Step 1: PDFからテキスト抽出"
+)
+    ~~~~~^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^
+^
+UnicodeEncodeError: 'c
+p932' codec can't enco
+de character '\U0001f4
+d6' in position 2: ill
+egal multibyte sequenc
+e

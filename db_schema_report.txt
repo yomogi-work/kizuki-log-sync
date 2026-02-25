@@ -1,0 +1,106 @@
+=== Kizuki-Log Database Schema Report ===
+
+--- Table: students ---
+Definition:
+CREATE TABLE students (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL UNIQUE,
+        start_date TEXT
+    )
+
+Columns:
+  - id (INTEGER) (PRIMARY KEY)
+  - name (TEXT) NOT NULL
+  - start_date (TEXT)
+
+Indexes:
+  - sqlite_autoindex_students_1 (Unique: 1)
+    - Column: name
+
+========================================
+
+--- Table: journals ---
+Definition:
+CREATE TABLE journals (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        student_id INTEGER,
+        date TEXT,
+        week_number INTEGER,
+        content_raw TEXT,
+        FOREIGN KEY (student_id) REFERENCES students (id)
+    )
+
+Columns:
+  - id (INTEGER) (PRIMARY KEY)
+  - student_id (INTEGER)
+  - date (TEXT)
+  - week_number (INTEGER)
+  - content_raw (TEXT)
+
+Indexes:
+
+========================================
+
+--- Table: feedbacks ---
+Definition:
+CREATE TABLE feedbacks (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        journal_id INTEGER,
+        comment TEXT,
+        intent TEXT,
+        FOREIGN KEY (journal_id) REFERENCES journals (id)
+    )
+
+Columns:
+  - id (INTEGER) (PRIMARY KEY)
+  - journal_id (INTEGER)
+  - comment (TEXT)
+  - intent (TEXT)
+
+Indexes:
+
+========================================
+
+--- Table: insights ---
+Definition:
+CREATE TABLE insights (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        journal_id INTEGER,
+        type TEXT,
+        snippet TEXT,
+        reason TEXT,
+        FOREIGN KEY (journal_id) REFERENCES journals (id)
+    )
+
+Columns:
+  - id (INTEGER) (PRIMARY KEY)
+  - journal_id (INTEGER)
+  - type (TEXT)
+  - snippet (TEXT)
+  - reason (TEXT)
+
+Indexes:
+
+========================================
+
+--- Table: growth_triggers ---
+Definition:
+CREATE TABLE growth_triggers (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        student_id INTEGER,
+        date TEXT,
+        description TEXT,
+        FOREIGN KEY (student_id) REFERENCES students (id)
+    )
+
+Columns:
+  - id (INTEGER) (PRIMARY KEY)
+  - student_id (INTEGER)
+  - date (TEXT)
+  - description (TEXT)
+
+Indexes:
+
+========================================
+
+--- Triggers ---

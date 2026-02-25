@@ -1,0 +1,1116 @@
+:root {
+    --primary: #4a90e2;
+    --bg-color: #f0f2f5;
+    --text-primary: #1a1a1a;
+    --text-secondary: #5f6368;
+    --accent: #3b82f6;
+    --card-bg: rgba(255, 255, 255, 0.9);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.4);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --font-sans: 'Inter', "Noto Sans JP", sans-serif;
+
+    /* Stage Colors */
+    --color-w1: #e0f2fe;
+    --color-w1-dark: #0284c7;
+    --color-w5: #f0fdf4;
+    --color-w5-dark: #16a34a;
+    --color-w11: #fff1f2;
+    --color-w11-dark: #e11d48;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-sans);
+    background-color: var(--bg-color);
+    margin: 0;
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+.app-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    background: white;
+    padding: 1.5rem 2rem;
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+}
+
+.logo h1 {
+    font-size: 1.8rem;
+    margin: 0;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    color: #111827;
+}
+
+.subtitle {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-top: 0.2rem;
+}
+
+select {
+    padding: 0.8rem 1.2rem;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    font-size: 1rem;
+    background-color: #f9fafb;
+    cursor: pointer;
+    min-width: 200px;
+}
+
+/* Story Board Layout */
+.story-board {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+}
+
+.stage-column {
+    flex: 1;
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 1.5rem;
+    min-height: 600px;
+    box-shadow: var(--shadow-md);
+    border: var(--glass-border);
+    backdrop-filter: blur(8px);
+}
+
+.stage-connector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 3rem;
+    color: #cbd5e1;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+/* Stage Headers */
+.stage-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f3f4f6;
+}
+
+.stage-icon {
+    font-size: 2rem;
+    background: #fff;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: var(--shadow-sm);
+}
+
+.stage-info h2 {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.stage-theme {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* Specific Colors for Columns */
+#col-w1 .stage-icon {
+    color: var(--color-w1-dark);
+    background: var(--color-w1);
+}
+
+#col-w5 .stage-icon {
+    color: var(--color-w5-dark);
+    background: var(--color-w5);
+}
+
+#col-w11 .stage-icon {
+    color: var(--color-w11-dark);
+    background: var(--color-w11);
+}
+
+/* Cards */
+.growth-trigger-card {
+    background: linear-gradient(135deg, #f8fafc, #edf2f7);
+    padding: 1.2rem;
+    border-radius: 12px;
+    border-left: 4px solid var(--accent);
+    margin-bottom: 1rem;
+}
+
+.trigger-desc {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #334155;
+}
+
+.insight-card {
+    background: white;
+    padding: 1.2rem;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 1rem;
+    transition: transform 0.2s;
+}
+
+.insight-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.insight-header {
+    margin-bottom: 0.8rem;
+}
+
+.badgem {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 100px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.badge-生活背景 {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.badge-線 {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.badge-滲み出し {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.badge-伏線回収 {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.insight-text {
+    font-style: italic;
+    color: #4b5563;
+    margin-bottom: 0.8rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.insight-reason {
+    font-size: 0.85rem;
+    color: var(--color-w1-dark);
+    font-weight: 600;
+    background: #f0f9ff;
+    padding: 0.5rem;
+    border-radius: 6px;
+}
+
+/* AI Advice Section */
+.ai-advice-section {
+    background: linear-gradient(to right, #4f46e5, #ec4899);
+    border-radius: 16px;
+    padding: 3px;
+    /* for gradient border effect */
+    color: white;
+    box-shadow: var(--shadow-md);
+}
+
+.ai-advice-section>div:last-child {
+    background: white;
+    /* Inner content bg */
+    border-radius: 14px;
+    padding: 1.5rem;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+
+/* Settings Interface */
+.settings-interface {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: var(--shadow-md);
+}
+
+.settings-section {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.settings-section h3 {
+    font-size: 1.2rem;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.form-group-row {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.form-group-row .form-group {
+    flex: 1;
+}
+
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem;
+    background: #f9fafb;
+    border-radius: 16px;
+    border: 2px dashed #e5e7eb;
+    color: var(--text-secondary);
+}
+
+/* Tabs extension */
+.tab-nav {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    background: #e5e7eb;
+    padding: 0.5rem;
+    border-radius: 12px;
+    width: fit-content;
+}
+
+.tab-btn {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tab-btn.active {
+    background: white;
+    color: var(--primary);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Daily Interface Layout */
+.daily-interface {
+    display: grid;
+    grid-template-columns: 200px 1.2fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.daily-input-col {
+    flex: 1;
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: var(--shadow-md);
+}
+
+.daily-coach-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Forms */
+/* Forms */
+textarea {
+    width: 100%;
+    min-height: 100px;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    padding: 1rem;
+    font-size: 1rem;
+    font-family: var(--font-sans);
+    resize: vertical;
+    margin-bottom: 0.5rem;
+    box-sizing: border-box;
+}
+
+#journal-practical {
+    height: 150px;
+}
+
+#journal-unachieved {
+    height: 120px;
+    background-color: #ffffff;
+    border-color: #fca5a5;
+    /* Light red border for unachieved */
+}
+
+/* Focus styles */
+textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+#journal-unachieved:focus {
+    border-color: #e11d48;
+    box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.1);
+}
+
+.helper-text {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+/* Header Actions */
+.header-with-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.tertiary-btn {
+    background: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tertiary-btn:hover {
+    background: rgba(30, 58, 138, 0.05);
+}
+
+.primary-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+    width: 100%;
+}
+
+.primary-btn:hover {
+    background: #1d4ed8;
+}
+
+.secondary-btn {
+    background: white;
+    color: var(--text-primary);
+    border: 1px solid #d1d5db;
+    padding: 0.8rem 2rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+}
+
+.secondary-btn:hover {
+    background: #f9fafb;
+}
+
+/* Coach Cards */
+.coach-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid #e5e7eb;
+}
+
+.analysis-card {
+    border-left: 5px solid var(--accent);
+}
+
+.suggestion-card {
+    background: #fdfbf7;
+    /* Slightly warm for ideas */
+}
+
+.coach-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.coach-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.empty-state-sm {
+    color: #9ca3af;
+    font-style: italic;
+    text-align: center;
+    padding: 1rem;
+}
+
+.analysis-badge {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 100px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: white;
+    background: var(--text-secondary);
+    margin-bottom: 0.8rem;
+}
+
+.badge-生活背景 {
+    background: #e11d48;
+}
+
+.badge-知識の接続 {
+    background: #16a34a;
+}
+
+.badge-心情の受容 {
+    background: #d97706;
+}
+
+.analysis-msg {
+    line-height: 1.6;
+    color: var(--text-primary);
+}
+
+.suggestion-item {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    margin-bottom: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.95rem;
+}
+
+.suggestion-item:hover {
+    border-color: var(--accent);
+    transform: translateX(5px);
+}
+
+.header-with-icon {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.stage .icon {
+    font-size: 2rem;
+    background: #fff;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+
+.stage .label {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    font-weight: 600;
+}
+
+.stage .title {
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.progress-line {
+    flex: 0.5;
+    height: 4px;
+    background: #e0e6ed;
+    border-radius: 2px;
+    margin-bottom: 40px;
+}
+
+.stage.active .icon {
+    background: var(--primary);
+    color: white;
+}
+
+/* Grid layout */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 24px;
+}
+
+/* Insights Timeline */
+.insight-item {
+    padding: 15px;
+    border-left: 4px solid var(--primary);
+    background: rgba(74, 144, 226, 0.05);
+    border-radius: 0 12px 12px 0;
+    margin-bottom: 15px;
+}
+
+.insight-tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    background: var(--primary);
+    color: white;
+    margin-bottom: 8px;
+}
+
+.insight-snippet {
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.insight-reason {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    font-style: italic;
+}
+
+/* AI Advice Card */
+.highlighter {
+    background: linear-gradient(135deg, #67b26f 0%, #4ca2cd 100%);
+    color: white;
+}
+
+.highlighter h2 {
+    color: white;
+}
+
+.advice-card {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+#growth-description p {
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+}
+
+@media (max-width: 900px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ====================================================
+   ブリーフィング・レポート (Constitution §5.2)
+   ==================================================== */
+
+.briefing-section {
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.briefing-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.briefing-label {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--primary);
+    margin-bottom: 0.4rem;
+}
+
+.briefing-content {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--text-primary);
+}
+
+/* ====================================================
+   指導シード選択カード (Constitution §5.4)
+   ==================================================== */
+
+.seed-card {
+    background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+    border-left: 5px solid #16a34a;
+}
+
+.seed-instruction {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.8rem;
+}
+
+.seed-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    background: white;
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+    border: 1px solid #d1fae5;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.seed-option:hover {
+    border-color: #16a34a;
+    box-shadow: 0 2px 8px rgba(22, 163, 74, 0.1);
+}
+
+.seed-option input[type="radio"] {
+    margin-top: 3px;
+    accent-color: #16a34a;
+}
+
+.seed-text {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--text-primary);
+}
+
+/* ====================================================
+   SOSアラート (Constitution §6)
+   ==================================================== */
+
+.sos-alert-box {
+    background: linear-gradient(135deg, #fef2f2, #fff1f2);
+    border: 2px solid #ef4444;
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.sos-header {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #dc2626;
+    margin-bottom: 0.8rem;
+}
+
+.sos-reason {
+    font-size: 0.95rem;
+    color: #991b1b;
+    margin-bottom: 0.8rem;
+    line-height: 1.6;
+}
+
+.sos-action {
+    font-size: 0.9rem;
+    color: #7f1d1d;
+    background: rgba(255, 255, 255, 0.6);
+    padding: 0.8rem;
+    border-radius: 8px;
+}
+
+.sos-note {
+    text-align: center;
+    color: #dc2626;
+    font-weight: 600;
+    padding: 1rem;
+}
+
+/* ====================================================
+   エラー表示
+   ==================================================== */
+
+.error-box {
+    background: #fef2f2;
+    border: 1px solid #fca5a5;
+    border-radius: 12px;
+    padding: 1.2rem;
+}
+
+.error-header {
+    font-weight: 700;
+    color: #dc2626;
+    margin-bottom: 0.5rem;
+}
+
+.error-message {
+    font-size: 0.9rem;
+    color: #991b1b;
+    margin-bottom: 0.5rem;
+}
+
+/* ====================================================
+   Step0 (研究データ判定) カード
+   ==================================================== */
+
+.step0-card {
+    background: linear-gradient(135deg, #fdf4ff, #faf5ff);
+    border-left: 5px solid #9c27b0;
+}
+
+.step0-draft-item {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.draft-evidence {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #4b5563;
+    background: #f3f4f6;
+    padding: 0.6rem;
+    border-radius: 6px;
+    margin-bottom: 0.8rem;
+    border-left: 3px solid #9c27b0;
+}
+
+.draft-notes {
+    font-size: 0.85rem;
+    color: #6b7280;
+    margin-bottom: 0.8rem;
+    font-style: italic;
+}
+
+.draft-judgment-row {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.draft-judgment-row select {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.9rem;
+    border-color: #d1d5db;
+    min-width: 120px;
+}
+
+.error-suggestion {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* ====================================================
+   ローディングインジケータ
+   ==================================================== */
+
+.loading-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    padding: 1rem;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+.spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid #e5e7eb;
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ====================================================
+   前回の継続フラグ表示 (Constitution §5.4)
+   ==================================================== */
+
+.previous-triggers-box {
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    border: 1px solid #93c5fd;
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    margin-bottom: 1rem;
+}
+
+.triggers-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #1e40af;
+    margin-bottom: 0.3rem;
+}
+
+.triggers-content {
+    font-size: 0.9rem;
+    color: #1e3a5f;
+    line-height: 1.5;
+}
+
+/* ====================================================
+   指導者入力エリア
+   ==================================================== */
+
+.instructor-input-area {
+    border-top: 2px dashed #e5e7eb;
+    padding-top: 0.8rem;
+    margin-top: 0.5rem;
+}
+
+/* ====================================================
+   ボタンの disabled 状態
+   ==================================================== */
+
+.primary-btn:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+}
+
+/* ====================================================
+   Calendar
+   ==================================================== */
+
+.daily-calendar-col {
+    background: white;
+    border-radius: 16px;
+    padding: 1.2rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    margin-top: 0.8rem;
+}
+
+.calendar-day {
+    width: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    background: #f9fafb;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+    border: 1px solid transparent;
+}
+
+.calendar-day:hover {
+    border-color: var(--primary);
+}
+
+.calendar-day.filled {
+    background: var(--primary);
+    color: white;
+    font-weight: 700;
+}
+
+.calendar-day.active {
+    border: 2px solid #111827;
+    font-weight: 700;
+}
+
+.calendar-legend {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.8rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #f9fafb;
+    border: 1px solid #d1d5db;
+}
+
+.dot.filled {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+/* ====================================================
+   Weekly Review & Internal Scores
+   ==================================================== */
+
+.weekly-review-card {
+    background: #fff;
+    border: 2px solid #3b82f6;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+    box-shadow: var(--shadow-md);
+}
+
+.weekly-review-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 10px;
+}
+
+.weekly-review-section {
+    margin-bottom: 15px;
+}
+
+.weekly-review-label {
+    font-weight: 800;
+    color: #1e40af;
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+.weekly-review-content {
+    line-height: 1.6;
+    color: #374151;
+}
+
+/* 指導者用内部スコア表示 */
+.internal-score-box {
+    background: #f8fafc;
+    border: 1px dashed #94a3b8;
+    border-radius: 10px;
+    padding: 1.2rem;
+    margin-top: 15px;
+    display: none;
+    /* デフォルト非表示、指導者モードで表示 */
+}
+
+.instructor-mode .internal-score-box {
+    display: block;
+}
+
+.instructor-mode .story-board {
+    border: 2px solid #94a3b8;
+}
+
+.score-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.score-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.score-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #475569;
+}
+
+.score-bar-container {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.score-bar-fill {
+    height: 100%;
+    background: #8b5cf6;
+    border-radius: 4px;
+}
+
+.score-value {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #1e293b;
+    text-align: right;
+}
+
+/* 小さなスピナー */
+.spinner-small {
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

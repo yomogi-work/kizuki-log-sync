@@ -1,0 +1,10 @@
+import sqlite3
+conn = sqlite3.connect('kizuki_log.db')
+c = conn.cursor()
+c.execute("SELECT sql FROM sqlite_master WHERE name='feedbacks'")
+print("feedbacks:", c.fetchone()[0])
+c.execute("SELECT sql FROM sqlite_master WHERE name='journals'")
+print("journals:", c.fetchone()[0])
+c.execute("SELECT sql FROM sqlite_master WHERE name='insights'")
+print("insights:", c.fetchone()[0])
+conn.close()

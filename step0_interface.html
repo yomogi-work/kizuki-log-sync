@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 0: 概念化レベル手動判定</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+JP:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f1117;
+            --surface: #1a1d27;
+            --surface-2: #242736;
+            --border: #2e3144;
+            --text: #e4e6ef;
+            --text-muted: #8b8fa3;
+            --primary: #6c5ce7;
+            --primary-glow: rgba(108, 92, 231, 0.15);
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #ff6b6b;
+            --lv1: #74b9ff;
+            --lv2: #fdcb6e;
+            --lv3: #55efc4;
+            --radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, rgba(108, 92, 231, 0.15), rgba(0, 184, 148, 0.08));
+            border-bottom: 1px solid var(--border);
+            padding: 24px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+        }
+
+        .header h1 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6c5ce7, #00b894);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .progress-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .progress-track {
+            width: 200px;
+            height: 8px;
+            background: var(--surface-2);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6c5ce7, #00b894);
+            border-radius: 4px;
+            transition: width 0.4s ease;
+        }
+
+        .progress-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+
+        /* Navigation */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: var(--surface-2);
+            border-color: var(--primary);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .nav-btn.primary {
+            background: var(--primary);
+            border-color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Entry Card */
+        .entry-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+
+        .entry-meta {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .meta-tag {
+            padding: 4px 12px;
+            background: var(--surface-2);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .meta-tag.student {
+            border-left: 3px solid var(--primary);
+        }
+
+        .meta-tag.week {
+            border-left: 3px solid var(--success);
+        }
+
+        .meta-tag.date {
+            border-left: 3px solid var(--warning);
+        }
+
+        .entry-counter {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .entry-text {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            font-size: 0.95rem;
+            line-height: 1.9;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        /* Pharmacist feedback section */
+        .feedback-section {
+            margin-top: 16px;
+            padding: 16px 20px;
+            background: rgba(108, 92, 231, 0.06);
+            border: 1px solid rgba(108, 92, 231, 0.15);
+            border-radius: 8px;
+        }
+
+        .feedback-label {
+            font-size: 0.75rem;
+            color: var(--primary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .feedback-text {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            white-space: pre-wrap;
+        }
+
+        /* Judgment Form */
+        .judgment-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+
+        .judgment-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        /* Level Selection */
+        .level-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .level-btn {
+            padding: 16px;
+            border: 2px solid var(--border);
+            background: var(--bg);
+            border-radius: var(--radius);
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.25s;
+        }
+
+        .level-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .level-btn.selected {
+            transform: translateY(-2px);
+        }
+
+        .level-btn[data-level="1"].selected {
+            border-color: var(--lv1);
+            background: rgba(116, 185, 255, 0.1);
+            box-shadow: 0 0 20px rgba(116, 185, 255, 0.15);
+        }
+
+        .level-btn[data-level="2"].selected {
+            border-color: var(--lv2);
+            background: rgba(253, 203, 110, 0.1);
+            box-shadow: 0 0 20px rgba(253, 203, 110, 0.15);
+        }
+
+        .level-btn[data-level="3"].selected {
+            border-color: var(--lv3);
+            background: rgba(85, 239, 196, 0.1);
+            box-shadow: 0 0 20px rgba(85, 239, 196, 0.15);
+        }
+
+        .level-num {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .level-btn[data-level="1"] .level-num {
+            color: var(--lv1);
+        }
+
+        .level-btn[data-level="2"] .level-num {
+            color: var(--lv2);
+        }
+
+        .level-btn[data-level="3"] .level-num {
+            color: var(--lv3);
+        }
+
+        .level-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* Confidence */
+        .confidence-section {
+            margin-bottom: 24px;
+        }
+
+        .confidence-section label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .confidence-options {
+            display: flex;
+            gap: 12px;
+        }
+
+        .conf-btn {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+
+        .conf-btn:hover {
+            border-color: var(--primary);
+        }
+
+        .conf-btn.selected {
+            border-color: var(--primary);
+            background: var(--primary-glow);
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        /* Text inputs */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            resize: vertical;
+            min-height: 80px;
+            transition: border-color 0.2s;
+        }
+
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Status indicator */
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+
+        .status-dot.done {
+            background: var(--success);
+        }
+
+        .status-dot.pending {
+            background: var(--border);
+        }
+
+        /* Export section */
+        .export-section {
+            text-align: center;
+            padding: 32px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        .export-btn {
+            padding: 14px 40px;
+            background: linear-gradient(135deg, #6c5ce7, #00b894);
+            border: none;
+            border-radius: var(--radius);
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(108, 92, 231, 0.35);
+        }
+
+        .export-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Reference panel */
+        .ref-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            z-index: 200;
+            box-shadow: 0 4px 16px rgba(108, 92, 231, 0.4);
+        }
+
+        .ref-panel {
+            position: fixed;
+            top: 0;
+            right: -420px;
+            width: 400px;
+            height: 100vh;
+            background: var(--surface);
+            border-left: 1px solid var(--border);
+            padding: 24px;
+            overflow-y: auto;
+            z-index: 150;
+            transition: right 0.3s ease;
+        }
+
+        .ref-panel.open {
+            right: 0;
+        }
+
+        .ref-panel h3 {
+            font-size: 1rem;
+            margin-bottom: 16px;
+        }
+
+        .ref-level {
+            padding: 14px;
+            background: var(--bg);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border-left: 3px solid var(--border);
+        }
+
+        .ref-level.lv1 {
+            border-left-color: var(--lv1);
+        }
+
+        .ref-level.lv2 {
+            border-left-color: var(--lv2);
+        }
+
+        .ref-level.lv3 {
+            border-left-color: var(--lv3);
+        }
+
+        .ref-level h4 {
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+        }
+
+        .ref-level p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Thumbnail list */
+        .thumbnail-list {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .thumb {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            color: var(--text-muted);
+        }
+
+        .thumb:hover {
+            border-color: var(--primary);
+        }
+
+        .thumb.current {
+            border-color: var(--primary);
+            background: var(--primary-glow);
+            color: var(--text);
+        }
+
+        .thumb.done {
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>Step 0: 概念化レベル手動判定</h1>
+        <div class="progress-bar">
+            <div class="progress-track">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <span class="progress-text" id="progressText">0 / 0</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="thumbnail-list" id="thumbnailList"></div>
+
+        <div class="nav-buttons">
+            <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>&#8592; 前へ</button>
+            <button class="nav-btn primary" id="nextBtn" onclick="navigate(1)">次へ &#8594;</button>
+        </div>
+
+        <div class="entry-card">
+            <div class="entry-counter" id="entryCounter"></div>
+            <div class="entry-meta" id="entryMeta"></div>
+            <div class="entry-text" id="entryText"></div>
+            <div class="feedback-section" id="feedbackSection" style="display:none">
+                <div class="feedback-label">薬剤師コメント</div>
+                <div class="feedback-text" id="feedbackText"></div>
+            </div>
+        </div>
+
+        <div class="judgment-card">
+            <h3>判定</h3>
+            <div class="level-options">
+                <div class="level-btn" data-level="1" onclick="setLevel(1)">
+                    <div class="level-num">Lv.1</div>
+                    <div class="level-label">事実記述（点）</div>
+                </div>
+                <div class="level-btn" data-level="2" onclick="setLevel(2)">
+                    <div class="level-num">Lv.2</div>
+                    <div class="level-label">文脈理解（線）</div>
+                </div>
+                <div class="level-btn" data-level="3" onclick="setLevel(3)">
+                    <div class="level-num">Lv.3</div>
+                    <div class="level-label">職能一般化（面）</div>
+                </div>
+            </div>
+
+            <div class="confidence-section">
+                <label>自信度</label>
+                <div class="confidence-options">
+                    <div class="conf-btn" data-conf="1" onclick="setConfidence(1)">1 - 迷った</div>
+                    <div class="conf-btn" data-conf="2" onclick="setConfidence(2)">2 - やや迷った</div>
+                    <div class="conf-btn" data-conf="3" onclick="setConfidence(3)">3 - 確信</div>
+                </div>
+            </div>
+
+            <div class="confidence-section" style="margin-bottom: 24px;">
+                <label>概念の主体 (Concept Source)</label>
+                <div class="confidence-options" id="source-options">
+                    <div class="conf-btn source-btn" data-source="SELF" onclick="setSource('SELF')">SELF (学生自身)</div>
+                    <div class="conf-btn source-btn" data-source="ECHO" onclick="setSource('ECHO')">ECHO (指導者由来)</div>
+                    <div class="conf-btn source-btn" data-source="MIXED" onclick="setSource('MIXED')">MIXED (混合)</div>
+                </div>
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px;">判断に迷ったら MIXED を選択してください</p>
+            </div>
+
+            <div class="form-group">
+                <label>エビデンス（判定根拠となるフレーズを引用）</label>
+                <textarea id="evidenceInput" placeholder="日誌テキストから根拠となる部分を引用..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>メモ（迷った理由など）</label>
+                <textarea id="notesInput" placeholder="判定に迷った理由、気づいたことなど..."></textarea>
+            </div>
+        </div>
+
+        <div class="export-section">
+            <p style="margin-bottom:16px; color: var(--text-muted);">全件判定後、結果をJSONファイルとしてダウンロード</p>
+            <button class="export-btn" id="exportBtn" onclick="exportResults()">結果をエクスポート</button>
+        </div>
+    </div>
+
+    <!-- Reference Panel -->
+    <button class="ref-toggle" onclick="toggleRef()">判定基準</button>
+    <div class="ref-panel" id="refPanel">
+        <h3>判定基準リファレンス</h3>
+        <div class="ref-level lv1">
+            <h4 style="color: var(--lv1);">Lv.1 事実記述（点）</h4>
+            <p>出来事を「点」として記録。解釈・理由付けなし。<br>
+                例:「〜を見学した」「〜と言われた」「忙しかった」<br>
+                主観的解釈なし / 因果関係の言及なし</p>
+        </div>
+        <div class="ref-level lv2">
+            <h4 style="color: var(--lv2);">Lv.2 文脈理解（線）</h4>
+            <p>背景・関連性に気づく。共通性を発見。仮説を立て始める。<br>
+                例:「〜だからではないか」「〜かもしれない」「前と似ている」<br>
+                「なぜ？」が内在 / 類似性・差異への言及 / まだ一般化はなし</p>
+        </div>
+        <div class="ref-level lv3">
+            <h4 style="color: var(--lv3);">Lv.3 職能一般化（面）</h4>
+            <p>個別経験を一般原則に昇華。他場面でも使えるルール抽出。<br>
+                例:「薬剤師には〜が必要」「今後は〜を意識する」<br>
+                他状況にも適用可能な法則化 / 職能の自己定義</p>
+        </div>
+        <hr style="border-color: var(--border); margin: 16px 0;">
+        <div style="font-size: 0.8rem; color: var(--text-muted);">
+            <p><strong>迷ったら:</strong> 低い方を選ぶ</p>
+            <p><strong>Lv1/Lv2 境界:</strong> キーワードだけで判断しない。根拠があればLv2。</p>
+            <p><strong>Lv2/Lv3 境界:</strong> 「北極星」と比較。同等の明確さがあればLv3。</p>
+        </div>
+    </div>
+
+    <script>
+        let data = null;
+        let currentIndex = 0;
+
+        // Load data
+        async function init() {
+            try {
+                const response = await fetch('./step0_data.json?t=' + Date.now());
+                data = await response.json();
+                renderEntry();
+                renderThumbnails();
+                updateProgress();
+            } catch (e) {
+                document.querySelector('.container').innerHTML =
+                    '<p style="color:var(--danger);padding:40px;text-align:center;">step0_data.json の読み込みに失敗しました。<br>先に python step0_extract_data.py を実行してください。</p>';
+            }
+        }
+
+        function renderEntry() {
+            const entry = data.entries[currentIndex];
+            const j = entry.judgment;
+
+            document.getElementById('entryCounter').textContent =
+                `エントリー ${currentIndex + 1} / ${data.entries.length}`;
+
+            document.getElementById('entryMeta').innerHTML = `
+                <span class="meta-tag student">${entry.context.student_name}</span>
+                <span class="meta-tag week">Week ${entry.context.week_number}</span>
+                <span class="meta-tag date">${entry.context.journal_date}</span>
+            `;
+
+            document.getElementById('entryText').textContent = entry.entry_text;
+
+            const fbSection = document.getElementById('feedbackSection');
+            if (entry.pharmacist_feedback) {
+                fbSection.style.display = 'block';
+                document.getElementById('feedbackText').textContent = entry.pharmacist_feedback;
+            } else {
+                fbSection.style.display = 'none';
+            }
+
+            // Restore judgment state
+            document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('selected'));
+            if (j.level) {
+                document.querySelector(`.level-btn[data-level="${j.level}"]`)?.classList.add('selected');
+            }
+
+            document.querySelectorAll('.conf-btn:not(.source-btn)').forEach(b => b.classList.remove('selected'));
+            if (j.confidence) {
+                document.querySelector(`.conf-btn[data-conf="${j.confidence}"]`)?.classList.add('selected');
+            }
+
+            document.querySelectorAll('.source-btn').forEach(b => b.classList.remove('selected'));
+            if (j.concept_source) {
+                document.querySelector(`.source-btn[data-source="${j.concept_source}"]`)?.classList.add('selected');
+            }
+
+            document.getElementById('evidenceInput').value = j.evidence || '';
+            document.getElementById('notesInput').value = j.notes || '';
+
+            // Nav buttons
+            document.getElementById('prevBtn').disabled = currentIndex === 0;
+            document.getElementById('nextBtn').textContent =
+                currentIndex === data.entries.length - 1 ? '完了' : '次へ →';
+
+            renderThumbnails();
+        }
+
+        function renderThumbnails() {
+            const list = document.getElementById('thumbnailList');
+            list.innerHTML = data.entries.map((e, i) => {
+                const done = e.judgment.level !== null;
+                const cls = i === currentIndex ? 'current' : (done ? 'done' : '');
+                return `<div class="thumb ${cls}" onclick="goTo(${i})">${i + 1}</div>`;
+            }).join('');
+        }
+
+        function saveCurrentJudgment() {
+            if (!data) return;
+            const entry = data.entries[currentIndex];
+            entry.judgment.evidence = document.getElementById('evidenceInput').value;
+            entry.judgment.notes = document.getElementById('notesInput').value;
+        }
+
+        function setLevel(lv) {
+            data.entries[currentIndex].judgment.level = lv;
+            document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelector(`.level-btn[data-level="${lv}"]`).classList.add('selected');
+            updateProgress();
+            renderThumbnails();
+        }
+
+        function setConfidence(conf) {
+            data.entries[currentIndex].judgment.confidence = conf;
+            document.querySelectorAll('.conf-btn:not(.source-btn)').forEach(b => b.classList.remove('selected'));
+            document.querySelector(`.conf-btn[data-conf="${conf}"]`).classList.add('selected');
+        }
+
+        function setSource(source) {
+            data.entries[currentIndex].judgment.concept_source = source;
+            document.querySelectorAll('.source-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelector(`.source-btn[data-source="${source}"]`).classList.add('selected');
+        }
+
+        function navigate(dir) {
+            saveCurrentJudgment();
+            currentIndex += dir;
+            if (currentIndex < 0) currentIndex = 0;
+            if (currentIndex >= data.entries.length) currentIndex = data.entries.length - 1;
+            renderEntry();
+            window.scrollTo(0, 0);
+        }
+
+        function goTo(idx) {
+            saveCurrentJudgment();
+            currentIndex = idx;
+            renderEntry();
+            window.scrollTo(0, 0);
+        }
+
+        function updateProgress() {
+            const done = data.entries.filter(e => e.judgment.level !== null).length;
+            const total = data.entries.length;
+            const pct = total > 0 ? (done / total * 100) : 0;
+            document.getElementById('progressFill').style.width = pct + '%';
+            document.getElementById('progressText').textContent = `${done} / ${total}`;
+        }
+
+        function toggleRef() {
+            document.getElementById('refPanel').classList.toggle('open');
+        }
+
+        function exportResults() {
+            saveCurrentJudgment();
+            const incomplete = data.entries.filter(e => e.judgment.level === null);
+            if (incomplete.length > 0) {
+                if (!confirm(`未判定が ${incomplete.length} 件あります。途中保存しますか？`)) return;
+            }
+
+            const output = {
+                metadata: {
+                    ...data.metadata,
+                    judgment_date: new Date().toISOString().split('T')[0],
+                    completed: data.entries.filter(e => e.judgment.level !== null).length,
+                    total: data.entries.length
+                },
+                entries: data.entries
+            };
+
+            const blob = new Blob([JSON.stringify(output, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `step0_judged_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'TEXTAREA') return;
+            switch (e.key) {
+                case '1': setLevel(1); break;
+                case '2': setLevel(2); break;
+                case '3': setLevel(3); break;
+                case 'ArrowRight': navigate(1); break;
+                case 'ArrowLeft': navigate(-1); break;
+            }
+        });
+
+        init();
+    </script>
+</body>
+
+</html>
