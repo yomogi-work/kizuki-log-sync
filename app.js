@@ -738,7 +738,12 @@ function updateDashboard(student) {
         return;
     }
 
-    const targetWeeks = [1, 5, 11];
+    let targetWeeks = [1, 5, 11];
+    if (student.weekly_reviews) {
+        const reviewedWeeks = Object.keys(student.weekly_reviews).map(Number);
+        targetWeeks = Array.from(new Set([...targetWeeks, ...reviewedWeeks])).sort((a, b) => a - b);
+    }
+
     targetWeeks.forEach((weekNum, index) => {
         const column = createStageColumn(weekNum, student);
         container.appendChild(column);
@@ -1065,7 +1070,8 @@ function calculateWeekNumber(dateStr, startDateStr) {
     const start = new Date(startDateStr);
     const diffTime = date - start;
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return Math.floor(Math.max(0, diffDays) / 7) + 1;
+    const calculatedWeek = Math.floor(Math.max(0, diffDays) / 7) + 1;
+    return Math.min(calculatedWeek, 11); // 実習は最大11週
 }
 
 function escapeHtml(str) {

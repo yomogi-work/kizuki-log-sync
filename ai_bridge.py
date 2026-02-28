@@ -489,9 +489,11 @@ def analyze_weekly(week_number: int, journals: list) -> dict:
         
         journal_texts.append(entry)
 
-    user_prompt = f"""第 {week_number} 週のまとめ分析依頼：
+    user_prompt = f"""【重要事項】
+これは全11週間にわたる薬局実習のうち、「第 {week_number} 週目」のまとめ分析です。
+({week_number}/11週目という現在地を強く意識してください。序盤・中盤の週である場合、「実習全体を通して」や「初日から最終日で大きく変化した」といった完了形の評価は不適切です)
 
-以下の 1 週間分の実習記録と判定データを精査し、週次レビューを作成してください。
+以下の第 {week_number} 週目の実習記録と判定データを精査し、週次レビューを作成してください：
 
 {"".join(journal_texts)}
 
