@@ -91,6 +91,13 @@ def get_ai_bridge():
 
 
 class KizukiHandler(http.server.SimpleHTTPRequestHandler):
+    def end_headers(self):
+        """すべてのレスポンスにキャッシュ無効化ヘッダーを追加（Safari対策）"""
+        self.send_header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+        self.send_header('Pragma', 'no-cache')
+        self.send_header('Expires', '0')
+        super().end_headers()
+
     def do_POST(self):
         if self.path == '/save':
             self._handle_save()

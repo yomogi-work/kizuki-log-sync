@@ -739,10 +739,21 @@ function updateDashboard(student) {
     }
 
     let targetWeeks = [1, 5, 11];
+
+    // 日誌が存在する週をすべて追加
+    if (student.journals && student.journals.length > 0) {
+        const journalWeeks = student.journals.map(j => j.week_number).filter(w => w != null);
+        targetWeeks = [...targetWeeks, ...journalWeeks];
+    }
+
+    // すでにレビューがある週を追加
     if (student.weekly_reviews) {
         const reviewedWeeks = Object.keys(student.weekly_reviews).map(Number);
-        targetWeeks = Array.from(new Set([...targetWeeks, ...reviewedWeeks])).sort((a, b) => a - b);
+        targetWeeks = [...targetWeeks, ...reviewedWeeks];
     }
+
+    // 重複を排除してソート
+    targetWeeks = Array.from(new Set(targetWeeks)).sort((a, b) => a - b);
 
     targetWeeks.forEach((weekNum, index) => {
         const column = createStageColumn(weekNum, student);
