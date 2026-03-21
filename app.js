@@ -884,7 +884,8 @@ function createStageColumn(weekNum, student) {
     });
 
     if (contentArea.innerHTML === '') {
-        contentArea.innerHTML = '<div class="empty-state">日誌を入力すると、ここに「気づき」が積み上がります。</div>';
+        // 何も表示しない（不要なスペースを生まないため破線枠を削除）
+        contentArea.style.display = 'none';
     }
 
     // 週次レビューの追加（もしあれば）
