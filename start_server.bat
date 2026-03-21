@@ -1,17 +1,16 @@
 @echo off
-chcp 65001 > nul
 cd /d %~dp0
 echo =========================================
-echo   Kizuki-Log サーバー起動
+echo   Kizuki-Log Server Starting...
 echo =========================================
 echo.
-echo Git Pull/Push は自動で実行されます。
-echo 終了はブラウザの「システム終了」ボタンから。
+echo Git Pull/Push is automated by the Python script.
+echo To shutdown, use the "Shutdown" button in the browser.
 echo.
 python start_server.py
 if %errorlevel% neq 0 (
     echo.
-    echo サーバーの起動に失敗しました。
-    echo Pythonがインストールされているか確認してください。
+    echo Failed to start the server.
+    echo Please ensure Python is installed.
     pause
 )
