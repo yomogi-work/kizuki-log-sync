@@ -4,6 +4,7 @@ import webbrowser
 import os
 import json
 import subprocess
+import threading
 from datetime import datetime
 
 # Change directory to the script's directory
@@ -105,6 +106,8 @@ class KizukiHandler(http.server.SimpleHTTPRequestHandler):
             self._handle_analyze()
         elif self.path == '/review_weekly':
             self._handle_review_weekly()
+        elif self.path == '/shutdown':
+            self._handle_shutdown()
         else:
             self.send_response(404)
             self.end_headers()
@@ -230,6 +233,16 @@ class KizukiHandler(http.server.SimpleHTTPRequestHandler):
         except Exception as e:
             print(f"Weekly review error: {e}")
             self._send_json(500, {"error": True, "message": f"週次分析中にエラーが発生しました: {str(e)}"})
+
+    def _handle_shutdown(self):
+        """システム終了リクエストの処理"""
+        print("\n🔴 システム終了リクエストを受信しました")
+        self._send_json(200, {"status": "shutting_down", "message": "サーバーを停止します..."})
+        # レスポンス送信後にサーバーを停止
+        def delayed_shutdown():
+            auto_sync_push()
+            os._exit(0)
+        threading.Timer(1.0, delayed_shutdown).start()
 
     def _send_json(self, status_code, data):
         """JSONレスポンスを送信する共通メソッド"""

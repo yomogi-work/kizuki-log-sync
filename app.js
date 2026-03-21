@@ -6,6 +6,9 @@ let globalSettings = {
     keywords: "地域連携, 在宅医療, 丁寧な服薬指導"
 };
 
+// 初期データ収集用の学生（UIから非表示、データは保持）
+const HIDDEN_STUDENT_IDS = [1, 4, 7, 10];
+
 /**
  * 名前文字列から安定したIDを生成する。
  * 同じ名前なら常に同じIDが返る（デバイス間同期対策）。
@@ -40,8 +43,9 @@ async function init() {
 
         populateStudentSelector();
 
-        // 初期表示
-        const firstStudent = dashboardData.students[0];
+        // 初期表示（表示可能な学生のみ）
+        const visibleStudents = dashboardData.students.filter(s => !HIDDEN_STUDENT_IDS.includes(s.id));
+        const firstStudent = visibleStudents[0];
         if (firstStudent) {
             updateDashboard(firstStudent);
             syncSettingsForm(firstStudent);
@@ -83,6 +87,23 @@ async function init() {
 }
 
 function setupEventListeners() {
+    // システム終了ボタン
+    const shutdownBtn = document.getElementById('shutdown-btn');
+    if (shutdownBtn) {
+        shutdownBtn.addEventListener('click', async () => {
+            if (!confirm('システムを終了しますか？\n\n変更は自動的にGitHubへバックアップされます。')) return;
+            shutdownBtn.disabled = true;
+            shutdownBtn.textContent = '⏳ 終了中...';
+            try {
+                await fetch('/shutdown', { method: 'POST' });
+                document.body.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif;"><div style="text-align:center;"><h1>✅ システムを終了しました</h1><p style="color:#666;">ブラウザのタブを閉じてください。</p></div></div>';
+            } catch (e) {
+                // サーバー停止後は接続エラーになるのが正常
+                document.body.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif;"><div style="text-align:center;"><h1>✅ システムを終了しました</h1><p style="color:#666;">ブラウザのタブを閉じてください。</p></div></div>';
+            }
+        });
+    }
+
     // タブ切り替え
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -695,12 +716,14 @@ async function saveDataToServer() {
 function populateStudentSelector() {
     const selector = document.getElementById('student-select');
     selector.innerHTML = '';
-    dashboardData.students.forEach(student => {
-        const option = document.createElement('option');
-        option.value = student.id;
-        option.textContent = student.name;
-        selector.appendChild(option);
-    });
+    dashboardData.students
+        .filter(student => !HIDDEN_STUDENT_IDS.includes(student.id))
+        .forEach(student => {
+            const option = document.createElement('option');
+            option.value = student.id;
+            option.textContent = student.name;
+            selector.appendChild(option);
+        });
 }
 
 function syncSettingsForm(student) {
