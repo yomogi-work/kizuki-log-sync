@@ -348,15 +348,19 @@ function setupEventListeners() {
             alert("研究用データ（Step0）の判定を確定・保存しました！");
 
             // 保存完了のUI視覚的フィードバック
-            saveStep0Btn.textContent = "✓ 保存完了";
+            saveStep0Btn.textContent = "✓ 保存・生成開始";
             saveStep0Btn.style.backgroundColor = "#4caf50";
             setTimeout(() => {
-                saveStep0Btn.textContent = "この判定を確定して保存";
+                saveStep0Btn.textContent = "この判定を確定してAIコメントを作成";
                 saveStep0Btn.style.backgroundColor = "#9c27b0";
             }, 2000);
 
+            // 【NEW】チェックボックスの状態を取得
+            const linkPastCb = document.getElementById('link-past-seed-cb');
+            const usePastSeed = linkPastCb ? linkPastCb.checked : true;
+
             // AIコメントの生成処理
-            await generatePostStep0Comment(student, dateStr, finalJudgments);
+            await generatePostStep0Comment(student, dateStr, finalJudgments, usePastSeed);
         });
     }
 
@@ -528,7 +532,7 @@ async function performAIAnalysis(week, logAchieved, logUnachieved, previousTrigg
 // ==================================================
 // Post-Step0 指導コメント生成
 // ==================================================
-async function generatePostStep0Comment(student, dateStr, currentStep0) {
+async function generatePostStep0Comment(student, dateStr, currentStep0, usePastSeed = true) {
     const commentCard = document.getElementById('post-step0-comment-card');
     const commentText = document.getElementById('post-step0-comment-text');
     
@@ -536,20 +540,23 @@ async function generatePostStep0Comment(student, dateStr, currentStep0) {
 
     // 表示してローディングにする
     commentCard.style.display = 'block';
-    commentText.innerHTML = '<div class="spinner-small" style="display:inline-block; margin-right:8px; width:16px; height:16px; border-width:2px; vertical-align:middle;"></div> <span style="vertical-align:middle;">過去の指導文脈を解析し、コメントを生成中...</span>';
+    commentText.innerHTML = '<div class="spinner-small" style="display:inline-block; margin-right:8px; width:16px; height:16px; border-width:2px; vertical-align:middle;"></div> <span style="vertical-align:middle;">' + (usePastSeed ? '過去の指導文脈と統合し、コメントを生成中...' : 'コメントを生成中...') + '</span>';
     
-    // 直近3日分のサマリーを作成
-    const pastJournals = student.journals
-        .filter(j => j.date < dateStr && (j.selected_seed || j.step0_judgments))
-        .sort((a, b) => b.date.localeCompare(a.date))
-        .slice(0, 3);
-        
-    const studentSummary = {
-        recent_seeds: pastJournals.filter(j => j.selected_seed).map(j => j.selected_seed),
-        recent_step0_trends: pastJournals.filter(j => j.step0_judgments).flatMap(j => 
-            j.step0_judgments.map(s => `Level ${s.level} (${s.concept_source})`)
-        )
-    };
+    // 直近3日分のサマリーを作成するかどうかを判断
+    let studentSummary = {};
+    if (usePastSeed) {
+        const pastJournals = student.journals
+            .filter(j => j.date < dateStr && (j.selected_seed || j.step0_judgments))
+            .sort((a, b) => b.date.localeCompare(a.date))
+            .slice(0, 3);
+            
+        studentSummary = {
+            recent_seeds: pastJournals.filter(j => j.selected_seed).map(j => j.selected_seed),
+            recent_step0_trends: pastJournals.filter(j => j.step0_judgments).flatMap(j => 
+                j.step0_judgments.map(s => `Level ${s.level} (${s.concept_source})`)
+            )
+        };
+    }
     
     // API 呼び出し
     try {

@@ -255,7 +255,11 @@ class KizukiHandler(http.server.SimpleHTTPRequestHandler):
                 self._send_json(500, {"error": True, "message": "AI Bridge の読み込みに失敗しました。"})
                 return
 
-            print("指導コメントの生成を開始...")
+            print("\n" + "="*40)
+            print("🤖 指導コメントの生成を開始...")
+            print("▼ [DEBUG] APIサーバが受信したJSONペイロード (フロント→バック):")
+            print(json.dumps(request, ensure_ascii=False, indent=2))
+            print("="*40 + "\n")
             
             # プロバイダ指定対応
             provider_override = request.get('provider', '')

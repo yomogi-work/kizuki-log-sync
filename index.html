@@ -186,8 +186,17 @@
                             <div id="step0-drafts-list" class="step0-drafts-container">
                                 <!-- Draft items will be injected here by JS -->
                             </div>
+                            
+                            <!-- 指導者による文脈接続の明示的スイッチ -->
+                            <div class="form-group" style="margin-top: 12px; margin-bottom: 4px; padding: 8px; background-color: #f3e5f5; border-radius: 4px;">
+                                <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 12px; cursor: pointer; margin: 0; color: #4a148c; font-weight: 600;">
+                                    <input type="checkbox" id="link-past-seed-cb" checked style="margin-top: 2px;">
+                                    <span style="line-height: 1.4;">🔗 過去3日間の指導文脈（Seed）と関連付ける<br><span style="font-weight: 400; font-size: 11px; opacity: 0.8;">※今日のStep0が過去からの地続きである場合のみONにしてください</span></span>
+                                </label>
+                            </div>
+
                             <button id="save-step0-btn" class="primary-btn"
-                                style="margin-top: 12px; width: 100%; background-color: #9c27b0;">この判定を確定して保存</button>
+                                style="margin-top: 12px; width: 100%; background-color: #9c27b0;">この判定を確定してAIコメントを作成</button>
                         </div>
 
                         <!-- 【NEW】AIが提案する指導コメント (Post-Step0) -->
