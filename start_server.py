@@ -181,7 +181,6 @@ class KizukiHandler(http.server.SimpleHTTPRequestHandler):
                 week=week,
                 log_achieved=log_achieved,
                 log_unachieved=log_unachieved,
-                previous_triggers=previous_triggers,
                 instructor_notes=instructor_notes
             )
             print("AI解析が完了しました")
