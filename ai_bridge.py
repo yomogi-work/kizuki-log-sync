@@ -624,6 +624,13 @@ def generate_daily_comment(current_step0, student_summary):
   "daily_comment": "生成した指導コメント（1〜2文）"
 }}
 """
+    provider_map = {
+        'gemini': call_gemini,
+        'openai': call_openai,
+        'anthropic': call_anthropic,
+        'groq': call_groq,
+    }
+    
     try:
         call_fn = provider_map.get(provider, call_gemini)
         response = call_fn(
