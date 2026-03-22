@@ -631,12 +631,27 @@ def generate_daily_comment(current_step0, student_summary):
         'groq': call_groq,
     }
     
+    fallback_provider = os.environ.get('AI_FALLBACK_PROVIDER', 'groq').lower()
+    
     try:
         call_fn = provider_map.get(provider, call_gemini)
-        response = call_fn(
-            system_prompt="あなたは熟練指導薬剤師です。JSONのみを出力します。",
-            user_prompt=prompt
-        )
+        
+        try:
+            response = call_fn(
+                system_prompt="あなたは熟練指導薬剤師です。JSONのみを出力します。",
+                user_prompt=prompt
+            )
+        except urllib.error.HTTPError as e:
+            if e.code == 429 and fallback_provider and fallback_provider in provider_map:
+                print(f"⚠️  指導コメント生成: {provider} がクォータ制限中。{fallback_provider} にフォールバックします...")
+                fallback_fn = provider_map[fallback_provider]
+                response = fallback_fn(
+                    system_prompt="あなたは熟練指導薬剤師です。JSONのみを出力します。",
+                    user_prompt=prompt
+                )
+            else:
+                raise
+                
         data = json.loads(response)
         return data
 
