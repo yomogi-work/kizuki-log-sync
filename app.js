@@ -1115,31 +1115,30 @@ function updateAiAdvice(student) {
     adviceContent.innerHTML = `<div class="advice-box">${advice}</div>`;
 }
 
+function clearAnalysisCards() {
+    const resultDiv = document.getElementById('daily-analysis-result');
+    if (resultDiv) resultDiv.innerHTML = '<div class="empty-state-sm">日誌を入力して解析ボタンを押してね</div>';
+
+    const suggestDiv = document.getElementById('daily-suggestions');
+    if (suggestDiv) suggestDiv.innerHTML = '';
+
+    const seedCard = document.getElementById('seed-selection-card');
+    if (seedCard) seedCard.style.display = 'none';
+    
+    const step0Card = document.getElementById('step0-judgment-card');
+    if (step0Card) step0Card.style.display = 'none';
+
+    const commentCard = document.getElementById('post-step0-comment-card');
+    if (commentCard) commentCard.style.display = 'none';
+}
+
 function clearDailyInterface() {
     document.getElementById('journal-practical').value = '';
     document.getElementById('journal-unachieved').value = '';
     document.getElementById('instructor-notes').value = '';
     document.getElementById('feedback-input').value = '';
 
-    const resultDiv = document.getElementById('daily-analysis-result');
-    if (resultDiv) {
-        resultDiv.innerHTML = '<div class="empty-state-sm">日誌を入力して解析ボタンを押してね</div>';
-    }
-
-    const suggestDiv = document.getElementById('daily-suggestions');
-    if (suggestDiv) {
-        suggestDiv.innerHTML = '';
-    }
-
-    const seedCard = document.getElementById('seed-selection-card');
-    if (seedCard) {
-        seedCard.style.display = 'none';
-    }
-
-    const commentCard = document.getElementById('post-step0-comment-card');
-    if (commentCard) {
-        commentCard.style.display = 'none';
-    }
+    clearAnalysisCards();
 
     document.getElementById('daily-date').valueAsDate = new Date();
     loadPreviousTriggers();
@@ -1171,6 +1170,8 @@ function loadJournalForDate(dateStr) {
                 } else {
                     renderBriefingReport(journal.ai_analysis);
                 }
+            } else {
+                clearAnalysisCards();
             }
 
             // 保存済みのAIコメントがあれば表示
@@ -1187,6 +1188,7 @@ function loadJournalForDate(dateStr) {
             unachievedInput.value = "";
             instructorInput.value = "";
             feedbackInput.value = "";
+            clearAnalysisCards();
         }
 
         // 前回の継続フラグを更新

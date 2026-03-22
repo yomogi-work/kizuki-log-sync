@@ -652,7 +652,7 @@ def generate_daily_comment(current_step0, student_summary):
             else:
                 raise
                 
-        data = json.loads(response)
+        data = response if isinstance(response, dict) else json.loads(response)
         return data
 
     except Exception as e:
