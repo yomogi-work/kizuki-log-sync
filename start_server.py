@@ -106,6 +106,8 @@ class KizukiHandler(http.server.SimpleHTTPRequestHandler):
             self._handle_analyze()
         elif self.path == '/review_weekly':
             self._handle_review_weekly()
+        elif self.path == '/generate_daily_comment':
+            self._handle_generate_daily_comment()
         elif self.path == '/shutdown':
             self._handle_shutdown()
         else:
@@ -233,6 +235,42 @@ class KizukiHandler(http.server.SimpleHTTPRequestHandler):
         except Exception as e:
             print(f"Weekly review error: {e}")
             self._send_json(500, {"error": True, "message": f"週次分析中にエラーが発生しました: {str(e)}"})
+
+    def _handle_generate_daily_comment(self):
+        """二段構えAIコメントの生成リクエスト処理"""
+        content_length = int(self.headers['Content-Length'])
+        post_data = self.rfile.read(content_length)
+
+        try:
+            request = json.loads(post_data.decode('utf-8'))
+            current_step0 = request.get('current_step0', [])
+            student_summary = request.get('student_summary', {})
+
+            if not current_step0:
+                self._send_json(400, {"error": True, "message": "Step0の判定結果がありません。"})
+                return
+
+            bridge = get_ai_bridge()
+            if bridge is None:
+                self._send_json(500, {"error": True, "message": "AI Bridge の読み込みに失敗しました。"})
+                return
+
+            print("指導コメントの生成を開始...")
+            
+            # プロバイダ指定対応
+            provider_override = request.get('provider', '')
+            if provider_override:
+                import os as _os
+                _os.environ['AI_PROVIDER'] = provider_override
+
+            result = bridge.generate_daily_comment(current_step0, student_summary)
+            print("指導コメントの生成が完了しました")
+
+            self._send_json(200, result)
+
+        except Exception as e:
+            print(f"Daily comment generation API error: {e}")
+            self._send_json(500, {"error": True, "message": f"指導コメントの生成中にエラーが発生しました: {str(e)}"})
 
     def _handle_shutdown(self):
         """システム終了リクエストの処理"""

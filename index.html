@@ -190,6 +190,20 @@
                                 style="margin-top: 12px; width: 100%; background-color: #9c27b0;">この判定を確定して保存</button>
                         </div>
 
+                        <!-- 【NEW】AIが提案する指導コメント (Post-Step0) -->
+                        <div class="coach-card post-step0-card" id="post-step0-comment-card" 
+                            style="display: none; border-left-color: #4CAF50; background-color: #f7fff7;">
+                            <div class="coach-header">
+                                <span class="icon">🤖</span>
+                                <h3>AIが提案する指導コメント</h3>
+                            </div>
+                            <div id="post-step0-comment-text" style="font-size: 14px; color: #333; margin-bottom: 12px; line-height: 1.5; padding: 8px; background: white; border-radius: 4px; border: 1px dashed #4CAF50;">
+                                <!-- AI comment generated here -->
+                            </div>
+                            <button id="adopt-ai-comment-btn" class="secondary-btn" 
+                                style="width: 100%; border-color: #4CAF50; color: #4CAF50;">この文章を下の入力欄に採用する</button>
+                        </div>
+
                         <!-- Feedback Input -->
                         <div class="coach-card feedback-input-card">
                             <div class="coach-header">

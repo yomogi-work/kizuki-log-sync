@@ -588,6 +588,59 @@ def analyze_weekly(week_number: int, journals: list) -> dict:
         }
 
 
+def generate_daily_comment(current_step0, student_summary):
+    """
+    Step0（指導者判定済）の結果と、過去の文脈（Seed履歴）を踏まえて
+    最終的な「今日の指導コメント（1〜2文）」を生成する。
+    """
+    load_env()
+    provider = os.environ.get('AI_PROVIDER', 'gemini')
+    
+    prompt = f"""あなたは、地域密着型薬局の熟練指導薬剤師です。
+学生が提出した日誌をもとに作成された「指導者のStep0（注目ポイント）」と、「直近の指導文脈（過去のSeed）」を踏まえ、
+明日、あなたが学生に直接語りかける短く温かい「指導コメント」を1〜2文で作成してください。
+
+# 目的
+指導者が自分の手で考えた事実（Step0）を起点にしつつ、過去の文脈を織り交ぜて学生へ問いかけるコメントの「下書き」を提供すること。
+
+# 入力データ
+▼ 今日のStep0（指導者が確定した注目ポイント）:
+{json.dumps(current_step0, ensure_ascii=False, indent=2)}
+
+▼ 学生の直近3日間の指導文脈サマリー（過去に選んだSeed等）:
+{json.dumps(student_summary, ensure_ascii=False, indent=2)}
+
+# 出力の絶対ルール
+1. 【引用】必ず「今日のStep0」にある具体的な事実・言葉の引用から書き始めること。
+2. 【問い】「〜しなさい」「〜してください」という直接的な行動指示ではなく、「〜について一緒に考えてみませんか？」「〜はどう感じましたか？」という共感的な「問いかけ（オープンクエスチョン）」で終わること。
+3. 【文脈の接続（重要）】
+   - もし過去のSeed（サマリー）に「共通するテーマ」や「継続的な課題」がある場合、その連続性に触れる一言を自然に添えること。（例: 「ずっと意識してきた〇〇ですが〜」）
+   - ただし、過去のSeedがバラバラで一貫したテーマが無い場合は、無理やり連続性を作らず（嘘をつかず）、今日のStep0だけを起点にコメントすること。
+4. 【簡潔さ】長くても2文程度。口頭でサラッと言える自然な口語体にすること。
+
+# 出力形式
+必ず以下のJSON形式のみを出力してください。
+{{
+  "daily_comment": "生成した指導コメント（1〜2文）"
+}}
+"""
+    try:
+        call_fn = provider_map.get(provider, call_gemini)
+        response = call_fn(
+            system_prompt="あなたは熟練指導薬剤師です。JSONのみを出力します。",
+            user_prompt=prompt
+        )
+        data = json.loads(response)
+        return data
+
+    except Exception as e:
+        print(f"Daily comment generation error: {e}")
+        return {
+            "error": True,
+            "daily_comment": f"コメント生成に失敗しました: {str(e)}"
+        }
+
+
 # ──────────────────────────────────────────────
 # CLIテスト用
 # ──────────────────────────────────────────────

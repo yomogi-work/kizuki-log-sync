@@ -354,6 +354,27 @@ function setupEventListeners() {
                 saveStep0Btn.textContent = "この判定を確定して保存";
                 saveStep0Btn.style.backgroundColor = "#9c27b0";
             }, 2000);
+
+            // AIコメントの生成処理
+            await generatePostStep0Comment(student, dateStr, finalJudgments);
+        });
+    }
+
+    // AI提案コメントを採用するボタン
+    const adoptAiBtn = document.getElementById('adopt-ai-comment-btn');
+    if (adoptAiBtn) {
+        adoptAiBtn.addEventListener('click', () => {
+            const aiText = document.getElementById('post-step0-comment-text').textContent;
+            const feedbackInput = document.getElementById('feedback-input');
+            if (aiText && !aiText.includes('エラー') && !aiText.includes('生成中')) {
+                const currentVal = feedbackInput.value.trim();
+                feedbackInput.value = currentVal ? currentVal + '\n\n' + aiText : aiText;
+                
+                adoptAiBtn.textContent = "✓ 入力欄にコピーしました";
+                setTimeout(() => {
+                    adoptAiBtn.textContent = "この文章を下の入力欄に採用する";
+                }, 2000);
+            }
         });
     }
 
@@ -501,6 +522,65 @@ async function performAIAnalysis(week, logAchieved, logUnachieved, previousTrigg
         loadingEl.style.display = 'none';
         analyzeBtn.disabled = false;
         analyzeBtn.textContent = '🤖 AI解析・保存';
+    }
+}
+
+// ==================================================
+// Post-Step0 指導コメント生成
+// ==================================================
+async function generatePostStep0Comment(student, dateStr, currentStep0) {
+    const commentCard = document.getElementById('post-step0-comment-card');
+    const commentText = document.getElementById('post-step0-comment-text');
+    
+    if (!commentCard || !commentText) return;
+
+    // 表示してローディングにする
+    commentCard.style.display = 'block';
+    commentText.innerHTML = '<div class="spinner-small" style="display:inline-block; margin-right:8px; width:16px; height:16px; border-width:2px; vertical-align:middle;"></div> <span style="vertical-align:middle;">過去の指導文脈を解析し、コメントを生成中...</span>';
+    
+    // 直近3日分のサマリーを作成
+    const pastJournals = student.journals
+        .filter(j => j.date < dateStr && (j.selected_seed || j.step0_judgments))
+        .sort((a, b) => b.date.localeCompare(a.date))
+        .slice(0, 3);
+        
+    const studentSummary = {
+        recent_seeds: pastJournals.filter(j => j.selected_seed).map(j => j.selected_seed),
+        recent_step0_trends: pastJournals.filter(j => j.step0_judgments).flatMap(j => 
+            j.step0_judgments.map(s => `Level ${s.level} (${s.concept_source})`)
+        )
+    };
+    
+    // API 呼び出し
+    try {
+        const selectedProvider = document.getElementById('ai-provider-select')?.value || '';
+        const response = await fetch('/generate_daily_comment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                current_step0: currentStep0,
+                student_summary: studentSummary,
+                provider: selectedProvider
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.error) {
+            commentText.innerHTML = `<span style="color:red">エラー: ${escapeHtml(result.message)}</span>`;
+        } else if (result.daily_comment) {
+            const generatedComment = result.daily_comment;
+            commentText.textContent = generatedComment;
+            
+            // journal に保存
+            const journal = student.journals.find(j => j.date === dateStr);
+            if (journal) {
+                journal.ai_suggested_comment = generatedComment;
+                await saveDataToServer();
+            }
+        }
+    } catch (e) {
+        commentText.innerHTML = `<span style="color:red">通信エラー: ${escapeHtml(e.message)}</span>`;
     }
 }
 
@@ -1056,6 +1136,11 @@ function clearDailyInterface() {
         seedCard.style.display = 'none';
     }
 
+    const commentCard = document.getElementById('post-step0-comment-card');
+    if (commentCard) {
+        commentCard.style.display = 'none';
+    }
+
     document.getElementById('daily-date').valueAsDate = new Date();
     loadPreviousTriggers();
 }
@@ -1086,6 +1171,16 @@ function loadJournalForDate(dateStr) {
                 } else {
                     renderBriefingReport(journal.ai_analysis);
                 }
+            }
+
+            // 保存済みのAIコメントがあれば表示
+            const commentCard = document.getElementById('post-step0-comment-card');
+            const commentText = document.getElementById('post-step0-comment-text');
+            if (journal.ai_suggested_comment && commentCard && commentText) {
+                commentText.textContent = journal.ai_suggested_comment;
+                commentCard.style.display = 'block';
+            } else if (commentCard) {
+                commentCard.style.display = 'none';
             }
         } else {
             practicalInput.value = "";
